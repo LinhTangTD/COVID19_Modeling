@@ -1,4 +1,4 @@
-# COVID-19 Modeling with SIR
+# COVID-19 Modeling with SIR model
 
 <p align="center"><img src="https://www.lewuathe.com/assets/img/posts/2020-03-11-covid-19-dynamics-with-sir-model/sir.png"/></p>
 
