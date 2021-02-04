@@ -4,7 +4,7 @@
 
 `COVID19 Modeling` aims to create a statistical model simulating the spread of COVID-19 over time. Our model is built based on Susceptible-Infected-Recovered (SIR) models, which is one of the most common techniques in epidemic modeling. This project focuses on developing and examining the effects of different parameters on the basic and extended SIR models in order to understand the complexities of COVID-19 in different scenarios: with and without intervention measures, as well as to underpin such models with real world data to understand their predictive capabilities and limitations.
 
-This project is developed at the Applied Biostatistics Lab of Professor [Shonda Kuiper](https://www.grinnell.edu/user/kuipers), [Grinnell College](https://www.grinnell.edu/) during Spring 2021.
+This research project is being conducted at the Applied Biostatistics Lab of Professor [Shonda Kuiper](https://www.grinnell.edu/user/kuipers), [Grinnell College](https://www.grinnell.edu/) during Spring 2021.
 
 ## About SIR Model
 
