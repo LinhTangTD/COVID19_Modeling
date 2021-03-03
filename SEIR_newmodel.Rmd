@@ -13,10 +13,17 @@ knitr::opts_chunk$set(echo = TRUE)
 # Population is split into 2 sub-populations:
 # Vulnerable (V) and Non-Vulnerable (NV)
 N = 1000
-p.vulnerable = 1
+p.vulnerable = .5
 N.v = N * p.vulnerable
 N.nv = N - N.v
+```
 
+The below code chunk is assuming 100% is Non-Vulnerable
+
+```{r}
+# p.vulnerable = 0
+# N.v = N * p.vulnerable
+# N.nv = N - N.v
 # # Parameters Declaration for NV sub-population
 # 
 # ### Mutable Parameters (Testing effectiveness, quarantine days)
@@ -60,56 +67,6 @@ N.nv = N - N.v
 # Qsym = 0
 # Qasym = 0
 # Q = Qsym + Qasym #total quarantined
-
-
-
-
-# Parameters Declaration for V sub-population
-
-### Mutable Parameters (Testing effectiveness, quarantine days)
-p.test.sym.v = 0.7 #percentage of testing for symptomatic group
-p.test.asym.v = 0.3 #percentage of testing for asymptomatic group
-p.test.all.v = p.test.asym.v/4 #percentage of testing for all V sub-population
-p.fp.all.v = .01 #false positive percentage of testing for all V sub-population
-p.tp.sym.v = .98 #true positive percentage for symptomatic group
-p.tp.asym.v = .95 #true positive percentage for asymptomatic group
-day.q = 14 #quarantine period (days)
-
-### Immutatble Parameters (disease's rates)
-p.ns.v = 0 #percentage of initial non-susceptible
-p.sym.v = 0 #percentage of infected being symptomatic
-day.i = 10 #incubation period (days)
-E.rate = 1 / day.i #exposure rate
-
-I.rate.sym.v = 1.5 #infection rate for symptomatic group
-I.rate.asym.v = 1.5 #infection rate for asymptomatic group
-
-H.rate = .1 #hospitalization rate
-
-R.rate.sym.v = .3 #recovery rate for symptomatic group
-R.rate.asym.v = .4 #recovery rate for asymptomatic group
-R.rate.h.v = .5 #recovery rate for hospitalized group
-
-D.rate.sym.v = .2 #death rate for symptomatic group
-D.rate.asym.v = .1 #death rate for asymptomatic group
-D.rate.h.v = .2 #death rate for hospitalized group
-
-### Initial setting (day 0)
-Isym.v = 5 #initial infected symptomatic
-Iasym.v = 0 #initial infected asymptomatic
-I.v = Isym.v + Iasym.v #total infected
-R.v = N.v * p.ns.v #initial "recovered" i.e non-susceptible
-S.v = N.v - I.v - R.v
-FQ.v = 0
-E = 0
-D.v = 0
-H.v = 0
-Qsym.v = 0
-Qasym.v = 0
-Q.v = Qsym.v + Qasym.v #total quarantined
-```
-
-```{r}
 # df = data.frame(Day = numeric(),
 #                 S = numeric(),
 #                 FQ = numeric (),
@@ -121,6 +78,7 @@ Q.v = Qsym.v + Qasym.v #total quarantined
 #                 H = numeric(),
 #                 R = numeric(),
 #                 D = numeric())
+
 # df[1,] = list(0, S, FQ, E, Isym, Iasym, Qsym, Qasym, H, R, D)
 # for (i in 1:100) {
 #   ### Immediate calculations
@@ -174,7 +132,58 @@ Q.v = Qsym.v + Qasym.v #total quarantined
 #   D = D + dD
 #   df[i+1,] = list(i, S, FQ, E, Isym, Iasym, Qsym, Qasym, H, R, D)
 # }
+```
 
+The below code chunk is assuming 100% is Vulnerable
+
+```{r}
+# p.vulnerable = 1
+# N.v = N * p.vulnerable
+# N.nv = N - N.v
+
+# Parameters Declaration for V sub-population
+
+### Mutable Parameters (Testing effectiveness, quarantine days)
+p.test.sym.v = 0.7 #percentage of testing for symptomatic group
+p.test.asym.v = 0.3 #percentage of testing for asymptomatic group
+p.test.all.v = p.test.asym.v/4 #percentage of testing for all V sub-population
+p.fp.all.v = .01 #false positive percentage of testing for all V sub-population
+p.tp.sym.v = .98 #true positive percentage for symptomatic group
+p.tp.asym.v = .95 #true positive percentage for asymptomatic group
+day.q = 14 #quarantine period (days)
+
+### Immutatble Parameters (disease's rates)
+p.ns.v = 0 #percentage of initial non-susceptible
+p.sym.v = 0 #percentage of infected being symptomatic
+day.i = 10 #incubation period (days)
+E.rate = 1 / day.i #exposure rate
+
+I.rate.sym.v = 1.5 #infection rate for symptomatic group
+I.rate.asym.v = 1.5 #infection rate for asymptomatic group
+
+H.rate = .1 #hospitalization rate
+
+R.rate.sym.v = .3 #recovery rate for symptomatic group
+R.rate.asym.v = .4 #recovery rate for asymptomatic group
+R.rate.h.v = .5 #recovery rate for hospitalized group
+
+D.rate.sym.v = .2 #death rate for symptomatic group
+D.rate.asym.v = .1 #death rate for asymptomatic group
+D.rate.h.v = .2 #death rate for hospitalized group
+
+### Initial setting (day 0)
+Isym.v = 5 #initial infected symptomatic
+Iasym.v = 0 #initial infected asymptomatic
+I.v = Isym.v + Iasym.v #total infected
+R.v = N.v * p.ns.v #initial "recovered" i.e non-susceptible
+S.v = N.v - I.v - R.v
+FQ.v = 0
+E = 0
+D.v = 0
+H.v = 0
+Qsym.v = 0
+Qasym.v = 0
+Q.v = Qsym.v + Qasym.v #total quarantined
 
 df = data.frame(Day = numeric(),
                 S.v = numeric(),
