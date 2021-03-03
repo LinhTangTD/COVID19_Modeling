@@ -13,234 +13,233 @@ knitr::opts_chunk$set(echo = TRUE)
 # Population is split into 2 sub-populations:
 # Vulnerable (V) and Non-Vulnerable (NV)
 N = 1000
-p.vulnerable = .2
+p.vulnerable = 1
 N.v = N * p.vulnerable
 N.nv = N - N.v
 
-# Parameters Declaration for NV sub-population
-
-### Mutable Parameters (Testing effectiveness, quarantine days)
-p.test.sym = 0 #percentage of testing for symptomatic group
-p.test.asym = 0 #percentage of testing for asymptomatic group
-p.test.all = p.test.asym/2 #percentage of testing for all NV sub-population
-p.fp.all = .01 #false positive percentage of testing for all NV sub-population
-p.tp.sym = .98 #true positive percentage for symptomatic group
-p.tp.asym = .95 #true positive percentage for asymptomatic group
-day.q = 14 #quarantine period (days)
-
-### Immutatble Parameters (disease's rates)
-p.ns = .25 #percentage of initial non-susceptible
-p.sym = .5 #percentage of infected being symptomatic
-day.i = 10 #incubation period (days)
-E.rate = 1 / day.i #exposure rate
-
-I.rate.sym = 1 #infection rate for symptomatic group
-I.rate.asym = 1 #infection rate for asymptomatic group
-
-H.rate = .1 #hospitalization rate
-
-R.rate.sym = .09 #recovery rate for symptomatic group
-R.rate.asym = .1 #recovery rate for asymptomatic group
-R.rate.h = .05333 #recovery rate for hospitalized group
-
-D.rate.sym = .01 #death rate for symptomatic group
-D.rate.asym = .05 #death rate for asymptomatic group
-D.rate.h = 0.01333 #death rate for hospitalized group
-
-### Initial setting (day 0)
-Isym = 5 #initial infected symptomatic
-Iasym = 0 #initial infected asymptomatic
-I = Isym + Iasym #total infected
-R = N.nv * p.ns #initial "recovered" i.e non-susceptible
-S = N.nv - I - R
-FQ = 0
-E = 0
-D = 0
-H = 0
-Qsym = 0
-Qasym = 0
-Q = Qsym + Qasym #total quarantined
-
-
-
-# 
-# # Parameters Declaration for V sub-population
+# # Parameters Declaration for NV sub-population
 # 
 # ### Mutable Parameters (Testing effectiveness, quarantine days)
-# p.test.sym.v = 0.7 #percentage of testing for symptomatic group
-# p.test.asym.v = 0.3 #percentage of testing for asymptomatic group
-# p.test.all.v = p.test.asym.v/2 #percentage of testing for all V sub-population
-# p.fp.all.v = .01 #false positive percentage of testing for all V sub-population
-# p.tp.sym.v = .98 #true positive percentage for symptomatic group
-# p.tp.asym.v = .95 #true positive percentage for asymptomatic group
+# p.test.sym = 0 #percentage of testing for symptomatic group
+# p.test.asym = 0 #percentage of testing for asymptomatic group
+# p.test.all = p.test.asym/2 #percentage of testing for all NV sub-population
+# p.fp.all = .01 #false positive percentage of testing for all NV sub-population
+# p.tp.sym = .98 #true positive percentage for symptomatic group
+# p.tp.asym = .95 #true positive percentage for asymptomatic group
 # day.q = 14 #quarantine period (days)
 # 
 # ### Immutatble Parameters (disease's rates)
-# p.ns.v = 0 #percentage of initial non-susceptible
-# p.sym.v = .75 #percentage of infected being symptomatic
+# p.ns = .25 #percentage of initial non-susceptible
+# p.sym = .5 #percentage of infected being symptomatic
 # day.i = 10 #incubation period (days)
 # E.rate = 1 / day.i #exposure rate
 # 
-# I.rate.sym.v = 1.5 #infection rate for symptomatic group
-# I.rate.asym.v = 1.5 #infection rate for asymptomatic group
+# I.rate.sym = 1 #infection rate for symptomatic group
+# I.rate.asym = 1 #infection rate for asymptomatic group
 # 
 # H.rate = .1 #hospitalization rate
 # 
-# R.rate.sym.v = .3 #recovery rate for symptomatic group
-# R.rate.asym.v = .4 #recovery rate for asymptomatic group
-# R.rate.h.v = .5 #recovery rate for hospitalized group
+# R.rate.sym = .09 #recovery rate for symptomatic group
+# R.rate.asym = .1 #recovery rate for asymptomatic group
+# R.rate.h = .05333 #recovery rate for hospitalized group
 # 
-# D.rate.sym.v = .2 #death rate for symptomatic group
-# D.rate.asym.v = .1 #death rate for asymptomatic group
-# D.rate.h.v = .1 #death rate for hospitalized group
+# D.rate.sym = .01 #death rate for symptomatic group
+# D.rate.asym = .05 #death rate for asymptomatic group
+# D.rate.h = 0.01333 #death rate for hospitalized group
 # 
 # ### Initial setting (day 0)
-# Isym.v = 0 #initial infected symptomatic
-# Iasym.v = 0 #initial infected asymptomatic
-# I.v = Isym.v + Iasym.v #total infected
-# R.v = N.v * p.ns.v #initial "recovered" i.e non-susceptible
-# S.v = N.v - I.v - R.v
-# FQ.v = 0
+# Isym = 5 #initial infected symptomatic
+# Iasym = 0 #initial infected asymptomatic
+# I = Isym + Iasym #total infected
+# R = N.nv * p.ns #initial "recovered" i.e non-susceptible
+# S = N.nv - I - R
+# FQ = 0
 # E = 0
-# D.v = 0
-# H.v = 0
-# Qsym.v = 0
-# Qasym.v = 0
-# Q.v = Qsym.v + Qasym.v #total quarantined
+# D = 0
+# H = 0
+# Qsym = 0
+# Qasym = 0
+# Q = Qsym + Qasym #total quarantined
+
+
+
+
+# Parameters Declaration for V sub-population
+
+### Mutable Parameters (Testing effectiveness, quarantine days)
+p.test.sym.v = 0.7 #percentage of testing for symptomatic group
+p.test.asym.v = 0.3 #percentage of testing for asymptomatic group
+p.test.all.v = p.test.asym.v/4 #percentage of testing for all V sub-population
+p.fp.all.v = .01 #false positive percentage of testing for all V sub-population
+p.tp.sym.v = .98 #true positive percentage for symptomatic group
+p.tp.asym.v = .95 #true positive percentage for asymptomatic group
+day.q = 14 #quarantine period (days)
+
+### Immutatble Parameters (disease's rates)
+p.ns.v = 0 #percentage of initial non-susceptible
+p.sym.v = 0 #percentage of infected being symptomatic
+day.i = 10 #incubation period (days)
+E.rate = 1 / day.i #exposure rate
+
+I.rate.sym.v = 1.5 #infection rate for symptomatic group
+I.rate.asym.v = 1.5 #infection rate for asymptomatic group
+
+H.rate = .1 #hospitalization rate
+
+R.rate.sym.v = .3 #recovery rate for symptomatic group
+R.rate.asym.v = .4 #recovery rate for asymptomatic group
+R.rate.h.v = .5 #recovery rate for hospitalized group
+
+D.rate.sym.v = .2 #death rate for symptomatic group
+D.rate.asym.v = .1 #death rate for asymptomatic group
+D.rate.h.v = .2 #death rate for hospitalized group
+
+### Initial setting (day 0)
+Isym.v = 5 #initial infected symptomatic
+Iasym.v = 0 #initial infected asymptomatic
+I.v = Isym.v + Iasym.v #total infected
+R.v = N.v * p.ns.v #initial "recovered" i.e non-susceptible
+S.v = N.v - I.v - R.v
+FQ.v = 0
+E = 0
+D.v = 0
+H.v = 0
+Qsym.v = 0
+Qasym.v = 0
+Q.v = Qsym.v + Qasym.v #total quarantined
 ```
 
 ```{r}
-df = data.frame(Day = numeric(),
-                S = numeric(),
-                FQ = numeric (),
-                E = numeric(),
-                Isym = numeric(),
-                Iasym = numeric(),
-                Qsym = numeric(),
-                Qasym = numeric(),
-                H = numeric(),
-                R = numeric(),
-                D = numeric())
-df[1,] = list(0, S, FQ, E, Isym, Iasym, Qsym, Qasym, H, R, D)
-for (i in 1:100) {
-  ### Immediate calculations
-  new.exposed = (S/N) * (I.rate.sym * Isym + I.rate.asym * Iasym)
-  quarantine.released.today = FQ * 1/day.q
-  new.quarantined = S * p.test.all * p.fp.all
-  new.infected.all = E.rate * E #total infected
-    # infected symptomatic
-  new.infected.sym = new.infected.all * p.sym
-  confirmed.sym = Isym * p.test.sym * p.tp.sym #tested & true positive
-  nonconfirmed.sym = Isym - confirmed.sym #not-tested & false negative
-    # infected asymptomatic
-  new.infected.asym = new.infected.all - new.infected.sym
-  confirmed.asym = Iasym * p.test.asym * p.tp.asym
-  nonconfirmed.asym = Iasym - confirmed.asym
-    # transition between compartments (I, Q, H, R, D)
-  nonconfirmed.sym.to.H = nonconfirmed.sym * H.rate
-  nonconfirmed.sym.to.R = nonconfirmed.sym * R.rate.sym
-  nonconfirmed.sym.to.D = nonconfirmed.sym * D.rate.sym
-  nonconfirmed.asym.to.R = nonconfirmed.asym * R.rate.asym
-  Qsym.to.H = confirmed.sym * H.rate
-  Qsym.to.R = confirmed.sym * R.rate.sym
-  Qsym.to.D = confirmed.sym * D.rate.sym
-  Qasym.to.R = confirmed.asym * R.rate.asym
-  H.to.R = H * R.rate.h
-  H.to.D = H * D.rate.h
-
-  ### Calculate changes in each compartment
-  dS = - new.exposed - new.quarantined + quarantine.released.today
-  dFQ = new.quarantined - quarantine.released.today
-  dE = new.exposed - new.infected.all
-
-  dIsym = new.infected.sym - confirmed.sym - nonconfirmed.sym.to.H - nonconfirmed.sym.to.R - nonconfirmed.sym.to.D
-  dIasym = new.infected.asym - confirmed.asym - nonconfirmed.asym.to.R
-  dQsym = confirmed.sym - Qsym.to.H - Qsym.to.R - Qsym.to.D
-  dQasym = confirmed.asym - Qasym.to.R
-  dH = nonconfirmed.sym.to.H + Qsym.to.H - H.to.D  - H.to.R
-  dR = H.to.R + nonconfirmed.sym.to.R + Qsym.to.R + Qasym.to.R +  nonconfirmed.asym.to.R
-  dD = H.to.D + nonconfirmed.sym.to.D + Qsym.to.D
-
-  ### Final calculations
-  S = S + dS
-  FQ = FQ + dFQ
-  E = E + dE
-  Isym = Isym + dIsym
-  Iasym = Iasym + dIasym
-  Qsym = Qsym + dQsym
-  Qasym = Qasym + dQasym
-  H = H + dH
-  R = R + dR
-  D = D + dD
-  df[i+1,] = list(i, S, FQ, E, Isym, Iasym, Qsym, Qasym, H, R, D)
-}
-
-
-# 
-# df = data.frame(Day = numeric(), 
-#                 S.v = numeric(), 
-#                 FQ.v = numeric (),
-#                 E = numeric(), 
-#                 Isym.v = numeric(), 
-#                 Iasym.v = numeric(), 
-#                 Qsym.v = numeric(), 
-#                 Qasym.v = numeric(), 
-#                 H.v = numeric(), 
-#                 R.v = numeric(), 
-#                 D.v = numeric())
-# df[1,] = list(0, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
+# df = data.frame(Day = numeric(),
+#                 S = numeric(),
+#                 FQ = numeric (),
+#                 E = numeric(),
+#                 Isym = numeric(),
+#                 Iasym = numeric(),
+#                 Qsym = numeric(),
+#                 Qasym = numeric(),
+#                 H = numeric(),
+#                 R = numeric(),
+#                 D = numeric())
+# df[1,] = list(0, S, FQ, E, Isym, Iasym, Qsym, Qasym, H, R, D)
 # for (i in 1:100) {
 #   ### Immediate calculations
-#   new.exposed.v = (S.v/N) * (I.rate.sym.v * Isym.v + I.rate.asym.v * Iasym.v)
-#   quarantine.released.today.v = FQ.v * 1/day.q
-#   new.quarantined.v = S.v * p.test.all.v * p.fp.all.v
-#   new.infected.all.v = E.rate * E #total infected
+#   new.exposed = (S/N) * (I.rate.sym * Isym + I.rate.asym * Iasym)
+#   quarantine.released.today = FQ * 1/day.q
+#   new.quarantined = S * p.test.all * p.fp.all
+#   new.infected.all = E.rate * E #total infected
 #     # infected symptomatic
-#   new.infected.sym.v = new.infected.all * p.sym.v 
-#   confirmed.sym.v = Isym.v * p.test.sym.v * p.tp.sym.v #tested & true positive
-#   nonconfirmed.sym.v = Isym.v - confirmed.sym.v #not-tested & false negative
+#   new.infected.sym = new.infected.all * p.sym
+#   confirmed.sym = Isym * p.test.sym * p.tp.sym #tested & true positive
+#   nonconfirmed.sym = Isym - confirmed.sym #not-tested & false negative
 #     # infected asymptomatic
-#   new.infected.asym.v = new.infected.all.v - new.infected.sym.v
-#   confirmed.asym.v = Iasym.v * p.test.asym.v * p.tp.asym.v
-#   nonconfirmed.asym.v = Iasym.v - confirmed.asym.v
+#   new.infected.asym = new.infected.all - new.infected.sym
+#   confirmed.asym = Iasym * p.test.asym * p.tp.asym
+#   nonconfirmed.asym = Iasym - confirmed.asym
 #     # transition between compartments (I, Q, H, R, D)
-#   nonconfirmed.sym.to.H.v = nonconfirmed.sym.v * H.rate
-#   nonconfirmed.sym.to.R.v = nonconfirmed.sym.v * R.rate.sym.v
-#   nonconfirmed.sym.to.D.v = nonconfirmed.sym.v * D.rate.sym.v
-#   nonconfirmed.asym.to.R.v = nonconfirmed.asym.v * R.rate.asym.v  
-#   nonconfirmed.asym.to.D.v = nonconfirmed.asym.v * D.rate.asym.v
-#   Qsym.to.H.v = confirmed.sym.v * H.rate
-#   Qsym.to.R.v = confirmed.sym.v * R.rate.sym.v
-#   Qsym.to.D.v = confirmed.sym.v * D.rate.sym.v
-#   Qasym.to.R.v = confirmed.asym.v * R.rate.asym.v
-#   Qasym.to.D.v = confirmed.asym.v * D.rate.asym.v
-#   H.to.R.v = H.v * R.rate.h.v
-#   H.to.D.v = H.v * D.rate.h.v
-#   
+#   nonconfirmed.sym.to.H = nonconfirmed.sym * H.rate
+#   nonconfirmed.sym.to.R = nonconfirmed.sym * R.rate.sym
+#   nonconfirmed.sym.to.D = nonconfirmed.sym * D.rate.sym
+#   nonconfirmed.asym.to.R = nonconfirmed.asym * R.rate.asym
+#   Qsym.to.H = confirmed.sym * H.rate
+#   Qsym.to.R = confirmed.sym * R.rate.sym
+#   Qsym.to.D = confirmed.sym * D.rate.sym
+#   Qasym.to.R = confirmed.asym * R.rate.asym
+#   H.to.R = H * R.rate.h
+#   H.to.D = H * D.rate.h
+# 
 #   ### Calculate changes in each compartment
-#   dS.v = - new.exposed.v - new.quarantined.v + quarantine.released.today.v
-#   dFQ.v = new.quarantined.v - quarantine.released.today.v
-#   dE = new.exposed.v - new.infected.all.v
-#   
-#   dIsym.v = new.infected.sym.v - confirmed.sym.v - nonconfirmed.sym.to.H.v - nonconfirmed.sym.to.R.v - nonconfirmed.sym.to.D.v
-#   dIasym.v = new.infected.asym.v - confirmed.asym.v - nonconfirmed.asym.to.R.v - nonconfirmed.asym.to.D.v
-#   dQsym.v = confirmed.sym.v - Qsym.to.H.v - Qsym.to.R.v - Qsym.to.D.v
-#   dQasym.v = confirmed.asym.v - Qasym.to.R.v - Qasym.to.D.v
-#   dH.v = nonconfirmed.sym.to.H.v + Qsym.to.H.v - H.to.D.v - H.to.R.v
-#   dR.v = H.to.R.v + nonconfirmed.sym.to.R.v + nonconfirmed.sym.to.R.v + Qsym.to.R.v + Qasym.to.R.v
-#   dD.v = H.to.D.v + nonconfirmed.asym.to.D.v + nonconfirmed.asym.to.D.v + Qsym.to.D.v + Qasym.to.D.v
-#   
+#   dS = - new.exposed - new.quarantined + quarantine.released.today
+#   dFQ = new.quarantined - quarantine.released.today
+#   dE = new.exposed - new.infected.all
+# 
+#   dIsym = new.infected.sym - confirmed.sym - nonconfirmed.sym.to.H - nonconfirmed.sym.to.R - nonconfirmed.sym.to.D
+#   dIasym = new.infected.asym - confirmed.asym - nonconfirmed.asym.to.R
+#   dQsym = confirmed.sym - Qsym.to.H - Qsym.to.R - Qsym.to.D
+#   dQasym = confirmed.asym - Qasym.to.R
+#   dH = nonconfirmed.sym.to.H + Qsym.to.H - H.to.D  - H.to.R
+#   dR = H.to.R + nonconfirmed.sym.to.R + Qsym.to.R + Qasym.to.R +  nonconfirmed.asym.to.R
+#   dD = H.to.D + nonconfirmed.sym.to.D + Qsym.to.D
+# 
 #   ### Final calculations
-#   S.v = S.v + dS.v
-#   FQ.v = FQ.v + dFQ.v
+#   S = S + dS
+#   FQ = FQ + dFQ
 #   E = E + dE
-#   Isym.v = Isym.v + dIsym.v
-#   Iasym.v = Iasym.v + dIasym.v
-#   Qsym.v = Qsym.v + dQsym.v
-#   Qasym.v = Qasym.v + dQasym.v
-#   H.v = H.v + dH.v
-#   R.v = R.v + dR.v
-#   D.v = D.v + dD.v
-#   df[i+1,] = list(i, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
+#   Isym = Isym + dIsym
+#   Iasym = Iasym + dIasym
+#   Qsym = Qsym + dQsym
+#   Qasym = Qasym + dQasym
+#   H = H + dH
+#   R = R + dR
+#   D = D + dD
+#   df[i+1,] = list(i, S, FQ, E, Isym, Iasym, Qsym, Qasym, H, R, D)
 # }
+
+
+df = data.frame(Day = numeric(),
+                S.v = numeric(),
+                FQ.v = numeric (),
+                E = numeric(),
+                Isym.v = numeric(),
+                Iasym.v = numeric(),
+                Qsym.v = numeric(),
+                Qasym.v = numeric(),
+                H.v = numeric(),
+                R.v = numeric(),
+                D.v = numeric())
+df[1,] = list(0, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
+for (i in 1:100) {
+  ### Immediate calculations
+  new.exposed.v = (S.v/N) * (I.rate.sym.v * Isym.v + I.rate.asym.v * Iasym.v)
+  quarantine.released.today.v = FQ.v * 1/day.q
+  new.quarantined.v = S.v * p.test.all.v * p.fp.all.v
+  new.infected.all.v = E.rate * E #total infected
+    # infected symptomatic
+  new.infected.sym.v = new.infected.all.v * p.sym.v
+  confirmed.sym.v = Isym.v * p.test.sym.v * p.tp.sym.v #tested & true positive
+  nonconfirmed.sym.v = Isym.v - confirmed.sym.v #not-tested & false negative
+    # infected asymptomatic
+  new.infected.asym.v = new.infected.all.v - new.infected.sym.v
+  confirmed.asym.v = Iasym.v * p.test.asym.v * p.tp.asym.v
+  nonconfirmed.asym.v = Iasym.v - confirmed.asym.v
+    # transition between compartments (I, Q, H, R, D)
+  nonconfirmed.sym.to.H.v = nonconfirmed.sym.v * H.rate
+  nonconfirmed.sym.to.R.v = nonconfirmed.sym.v * R.rate.sym.v
+  nonconfirmed.sym.to.D.v = nonconfirmed.sym.v * D.rate.sym.v
+  nonconfirmed.asym.to.R.v = nonconfirmed.asym.v * R.rate.asym.v
+  nonconfirmed.asym.to.D.v = nonconfirmed.asym.v * D.rate.asym.v
+  Qsym.to.H.v = confirmed.sym.v * H.rate
+  Qsym.to.R.v = confirmed.sym.v * R.rate.sym.v
+  Qsym.to.D.v = confirmed.sym.v * D.rate.sym.v
+  Qasym.to.R.v = confirmed.asym.v * R.rate.asym.v
+  Qasym.to.D.v = confirmed.asym.v * D.rate.asym.v
+  H.to.R.v = H.v * R.rate.h.v
+  H.to.D.v = H.v * D.rate.h.v
+
+  ### Calculate changes in each compartment
+  dS.v = - new.exposed.v - new.quarantined.v + quarantine.released.today.v
+  dFQ.v = new.quarantined.v - quarantine.released.today.v
+  dE = new.exposed.v - new.infected.all.v
+
+  dIsym.v = new.infected.sym.v - confirmed.sym.v - nonconfirmed.sym.to.H.v - nonconfirmed.sym.to.R.v - nonconfirmed.sym.to.D.v
+  dIasym.v = new.infected.asym.v - confirmed.asym.v - nonconfirmed.asym.to.R.v - nonconfirmed.asym.to.D.v
+  dQsym.v = confirmed.sym.v - Qsym.to.H.v - Qsym.to.R.v - Qsym.to.D.v
+  dQasym.v = confirmed.asym.v - Qasym.to.R.v - Qasym.to.D.v
+  dH.v = nonconfirmed.sym.to.H.v + Qsym.to.H.v - H.to.D.v - H.to.R.v
+  dR.v = H.to.R.v + nonconfirmed.sym.to.R.v + nonconfirmed.sym.to.R.v + Qsym.to.R.v + Qasym.to.R.v
+  dD.v = H.to.D.v + nonconfirmed.asym.to.D.v + nonconfirmed.asym.to.D.v + Qsym.to.D.v + Qasym.to.D.v
+
+  ### Final calculations
+  S.v = S.v + dS.v
+  FQ.v = FQ.v + dFQ.v
+  E = E + dE
+  Isym.v = Isym.v + dIsym.v
+  Iasym.v = Iasym.v + dIasym.v
+  Qsym.v = Qsym.v + dQsym.v
+  Qasym.v = Qasym.v + dQasym.v
+  H.v = H.v + dH.v
+  R.v = R.v + dR.v
+  D.v = D.v + dD.v
+  df[i+1,] = list(i, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
+}
 ```
