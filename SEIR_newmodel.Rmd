@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Population is split into 2 sub-populations:
 # Vulnerable (V) and Non-Vulnerable (NV)
 N = 1000
-p.vulnerable = .5
+p.vulnerable = 1
 N.v = N * p.vulnerable
 N.nv = N - N.v
 ```
@@ -137,9 +137,9 @@ The below code chunk is assuming 100% is Non-Vulnerable
 The below code chunk is assuming 100% is Vulnerable
 
 ```{r}
-# p.vulnerable = 1
-# N.v = N * p.vulnerable
-# N.nv = N - N.v
+p.vulnerable = 1
+N.v = N * p.vulnerable
+N.nv = N - N.v
 
 # Parameters Declaration for V sub-population
 
@@ -154,7 +154,7 @@ day.q = 14 #quarantine period (days)
 
 ### Immutatble Parameters (disease's rates)
 p.ns.v = 0 #percentage of initial non-susceptible
-p.sym.v = 0 #percentage of infected being symptomatic
+p.sym.v = .5 #percentage of infected being symptomatic
 day.i = 10 #incubation period (days)
 E.rate = 1 / day.i #exposure rate
 
@@ -174,18 +174,18 @@ D.rate.h.v = .2 #death rate for hospitalized group
 ### Initial setting (day 0)
 Isym.v = 5 #initial infected symptomatic
 Iasym.v = 0 #initial infected asymptomatic
-I.v = Isym.v + Iasym.v #total infected
 R.v = N.v * p.ns.v #initial "recovered" i.e non-susceptible
-S.v = N.v - I.v - R.v
+S.v = N.v - Isym.v - Iasym.v - R.v
 FQ.v = 0
 E = 0
 D.v = 0
 H.v = 0
 Qsym.v = 0
 Qasym.v = 0
-Q.v = Qsym.v + Qasym.v #total quarantined
-
+Pop.v = S.v + FQ.v + E + Isym.v + Iasym.v + Qsym.v + Qasym.v + H.v + R.v + D.v
+  
 df = data.frame(Day = numeric(),
+                Pop.v = numeric(),
                 S.v = numeric(),
                 FQ.v = numeric (),
                 E = numeric(),
@@ -195,9 +195,32 @@ df = data.frame(Day = numeric(),
                 Qasym.v = numeric(),
                 H.v = numeric(),
                 R.v = numeric(),
-                D.v = numeric())
-df[1,] = list(0, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
-for (i in 1:100) {
+                D.v = numeric(),
+                new.exposed.v = numeric(),
+                quarantine.released.today.v = numeric(),
+                new.quarantined.v = numeric(),
+                new.infected.all.v = numeric(),
+                new.infected.sym.v = numeric(),
+                confirmed.sym.v = numeric(),
+                nonconfirmed.sym.v = numeric(),
+                new.infected.asym.v = numeric(),
+                confirmed.asym.v = numeric(),
+                nonconfirmed.asym.v = numeric(),
+                nonconfirmed.sym.to.H.v = numeric(),
+                nonconfirmed.sym.to.R.v = numeric(),
+                nonconfirmed.sym.to.D.v = numeric(),
+                nonconfirmed.asym.to.R.v = numeric(),
+                nonconfirmed.asym.to.D.v = numeric(),
+                Qsym.to.H.v = numeric(),
+                Qsym.to.R.v = numeric(),
+                Qsym.to.D.v = numeric(),
+                Qasym.to.R.v = numeric(),
+                Qasym.to.D.v = numeric(),
+                H.to.R.v = numeric(),
+                H.to.D.v = numeric()
+                )
+# df[1,] = list(0, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
+for (i in 1:101) {
   ### Immediate calculations
   new.exposed.v = (S.v/N) * (I.rate.sym.v * Isym.v + I.rate.asym.v * Iasym.v)
   quarantine.released.today.v = FQ.v * 1/day.q
@@ -217,13 +240,15 @@ for (i in 1:100) {
   nonconfirmed.sym.to.D.v = nonconfirmed.sym.v * D.rate.sym.v
   nonconfirmed.asym.to.R.v = nonconfirmed.asym.v * R.rate.asym.v
   nonconfirmed.asym.to.D.v = nonconfirmed.asym.v * D.rate.asym.v
-  Qsym.to.H.v = confirmed.sym.v * H.rate
-  Qsym.to.R.v = confirmed.sym.v * R.rate.sym.v
-  Qsym.to.D.v = confirmed.sym.v * D.rate.sym.v
-  Qasym.to.R.v = confirmed.asym.v * R.rate.asym.v
-  Qasym.to.D.v = confirmed.asym.v * D.rate.asym.v
+  Qsym.to.H.v = Qsym.v * H.rate
+  Qsym.to.R.v = Qsym.v * R.rate.sym.v
+  Qsym.to.D.v = Qsym.v * D.rate.sym.v
+  Qasym.to.R.v = Qasym.v * R.rate.asym.v
+  Qasym.to.D.v = Qasym.v * D.rate.asym.v
   H.to.R.v = H.v * R.rate.h.v
   H.to.D.v = H.v * D.rate.h.v
+  
+  df[i,] = list(i-1, Pop.v, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v, new.exposed.v, quarantine.released.today.v, new.quarantined.v, new.infected.all.v, new.infected.sym.v, confirmed.sym.v, nonconfirmed.sym.v, new.infected.asym.v, confirmed.asym.v, nonconfirmed.asym.v, nonconfirmed.sym.to.H.v, nonconfirmed.sym.to.R.v, nonconfirmed.sym.to.D.v, nonconfirmed.asym.to.R.v, nonconfirmed.asym.to.D.v, Qsym.to.H.v, Qsym.to.R.v, Qsym.to.D.v, Qasym.to.R.v, Qasym.to.D.v, H.to.R.v, H.to.D.v)
 
   ### Calculate changes in each compartment
   dS.v = - new.exposed.v - new.quarantined.v + quarantine.released.today.v
@@ -235,8 +260,8 @@ for (i in 1:100) {
   dQsym.v = confirmed.sym.v - Qsym.to.H.v - Qsym.to.R.v - Qsym.to.D.v
   dQasym.v = confirmed.asym.v - Qasym.to.R.v - Qasym.to.D.v
   dH.v = nonconfirmed.sym.to.H.v + Qsym.to.H.v - H.to.D.v - H.to.R.v
-  dR.v = H.to.R.v + nonconfirmed.sym.to.R.v + nonconfirmed.sym.to.R.v + Qsym.to.R.v + Qasym.to.R.v
-  dD.v = H.to.D.v + nonconfirmed.asym.to.D.v + nonconfirmed.asym.to.D.v + Qsym.to.D.v + Qasym.to.D.v
+  dR.v = H.to.R.v + nonconfirmed.sym.to.R.v + nonconfirmed.asym.to.R.v + Qsym.to.R.v + Qasym.to.R.v
+  dD.v = H.to.D.v + nonconfirmed.sym.to.D.v + nonconfirmed.asym.to.D.v + Qsym.to.D.v + Qasym.to.D.v
 
   ### Final calculations
   S.v = S.v + dS.v
@@ -249,6 +274,7 @@ for (i in 1:100) {
   H.v = H.v + dH.v
   R.v = R.v + dR.v
   D.v = D.v + dD.v
-  df[i+1,] = list(i, S.v, FQ.v, E, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
+  Pop.v = S.v + FQ.v + E + Isym.v + Iasym.v + Qsym.v + Qasym.v + H.v + R.v + D.v
 }
 ```
+
