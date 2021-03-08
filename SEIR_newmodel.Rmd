@@ -304,14 +304,14 @@ The below code chunk is using both vulnerable and non-vulnerable in the populati
 ```{r}
 # Population is split into 2 sub-populations:
 # Vulnerable (V) and Non-Vulnerable (NV)
-N = 1000
-p.vulnerable = .5
+N = 100000
+p.vulnerable = .2
 N.v = N * p.vulnerable
 N.nv = N - N.v
 
 # Shared parameters
 day.q = 14 #quarantine period (days)
-day.i = 10 #incubation period (days)
+day.i = 7 #incubation period (days)
 E.rate = 1 / day.i #exposure rate
 I.rate.sym = 1.5 #infection rate for symptomatic group
 I.rate.asym = 1.5 #infection rate for asymptomatic group
@@ -319,25 +319,21 @@ I.rate.asym = 1.5 #infection rate for asymptomatic group
 # Parameters Declaration for NV sub-population
 
 ### Mutable Parameters (Testing effectiveness, quarantine days)
-p.test.sym.nv = 0 #percentage of testing for symptomatic group
-p.test.asym.nv = 0 #percentage of testing for asymptomatic group
+p.test.sym.nv = 0.5 #percentage of testing for symptomatic group
+p.test.asym.nv = 0.3 #percentage of testing for asymptomatic group
 p.test.all.nv = p.test.asym.nv/2 #percentage of testing for all NV sub-population
-p.fp.all.nv = .01 #false positive percentage of testing for all NV sub-population
+p.fp.all.nv = .05 #false positive percentage of testing for all NV sub-population
 p.tp.sym.nv = .98 #true positive percentage for symptomatic group
 p.tp.asym.nv = .95 #true positive percentage for asymptomatic group
 
 ### Immutatble Parameters (disease's rates)
 p.ns.nv = .25 #percentage of initial non-susceptible
 p.sym.nv = .5 #percentage of infected being symptomatic
-
 H.rate.nv = .1 #hospitalization rate
-
 R.rate.sym.nv = .09 #recovery rate for symptomatic group
 R.rate.asym.nv = .1 #recovery rate for asymptomatic group
 R.rate.h.nv = .05333 #recovery rate for hospitalized group
-
 D.rate.sym.nv = .01 #death rate for symptomatic group
-D.rate.asym.nv = .05 #death rate for asymptomatic group
 D.rate.h.nv = 0.01333 #death rate for hospitalized group
 
 # Parameters Declaration for V sub-population
@@ -352,14 +348,11 @@ p.tp.asym.v = .95 #true positive percentage for asymptomatic group
 
 ### Immutatble Parameters (disease's rates)
 p.ns.v = 0 #percentage of initial non-susceptible
-p.sym.v = .5 #percentage of infected being symptomatic
-
+p.sym.v = .75 #percentage of infected being symptomatic
 H.rate.v = .1 #hospitalization rate
-
 R.rate.sym.v = .3 #recovery rate for symptomatic group
 R.rate.asym.v = .4 #recovery rate for asymptomatic group
 R.rate.h.v = .5 #recovery rate for hospitalized group
-
 D.rate.sym.v = .2 #death rate for symptomatic group
 D.rate.asym.v = .1 #death rate for asymptomatic group
 D.rate.h.v = .2 #death rate for hospitalized group
@@ -442,7 +435,7 @@ for (i in 0:100) {
   
   Pop.nv = S.nv + FQ.nv + E.nv + Isym.nv + Iasym.nv + Qsym.nv + Qasym.nv + H.nv + R.nv + D.nv
   Pop.v = S.v + FQ.v + E.v + Isym.v + Iasym.v + Qsym.v + Qasym.v + H.v + R.v + D.v
-  df[i,] = list(i, Pop.nv, S.nv, FQ.nv, E.nv, Isym.nv, Iasym.nv, Qsym.nv, Qasym.nv, H.nv, R.nv, D.nv,
+  df[i+1,] = list(i, Pop.nv, S.nv, FQ.nv, E.nv, Isym.nv, Iasym.nv, Qsym.nv, Qasym.nv, H.nv, R.nv, D.nv,
                    Pop.v, S.v, FQ.v, E.v, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
   
   ### Immediate calculations (for next day statistics)
