@@ -17,7 +17,7 @@ ui <- fluidPage(
     # Application title
     titlePanel("Simple SIR Model Simulation"),
 
-    # Sidebar with a slider input for number of bins 
+    # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
             sliderInput("Transmission",
@@ -67,18 +67,18 @@ server <- function(input, output) {
                           Recovered = numeric(),
                           Population = numeric())
         data[1,] = c(1, input$Population - input$Initial_Infected, input$Initial_Infected, 0, input$Population)
-        
+
         for (i in 2:input$Days) {
             NewInfected = round(data$Infected[i-1] * data$Susceptible[i-1] * (input$Transmission/input$Population), 0)
             NewRecovered = round(data$Infected[i-1] * input$Recovery, 0)
-            data[i,] = list(i, data$Susceptible[i-1] - NewInfected, data$Infected[i-1] + NewInfected - NewRecovered, data$Recovered[i-1] + NewRecovered, 
+            data[i,] = list(i, data$Susceptible[i-1] - NewInfected, data$Infected[i-1] + NewInfected - NewRecovered, data$Recovered[i-1] + NewRecovered,
                             input$Population)
-            
+
         }
         data <- arrange(data, desc(Day))
         data
     })
-    
+
     output$GraphPlot<- renderPlot({
         data = data.frame(Day = numeric(),
                           Susceptible = numeric(),
@@ -86,20 +86,22 @@ server <- function(input, output) {
                           Recovered = numeric(),
                           Population = numeric())
         data[1,] = c(1, input$Population - input$Initial_Infected, input$Initial_Infected, 0, input$Population)
-        
+
         for (i in 2:input$Days) {
             NewInfected = round(data$Infected[i-1] * data$Susceptible[i-1] * (input$Transmission/input$Population), 0)
             NewRecovered = round(data$Infected[i-1] * input$Recovery, 0)
-            data[i,] = list(i, data$Susceptible[i-1] - NewInfected, data$Infected[i-1] + NewInfected - NewRecovered, data$Recovered[i-1] + NewRecovered, 
+            data[i,] = list(i, data$Susceptible[i-1] - NewInfected, data$Infected[i-1] + NewInfected - NewRecovered, data$Recovered[i-1] + NewRecovered,
                             input$Population)
-            
+
         }
-        
-        ggplot(data, aes(x = Day, y = Susceptible)) +
-            geom_line()
-        
+
+        ggplot(data, aes(x = Day)) +
+            geom_line(aes(y = Susceptible), color = "blue", size = 1) +
+            geom_line(aes(y = Infected), color = "red", size = 1) +
+            geom_line(aes(y = Recovered), color = "green", size = 1)
+
     })
 }
 
-# Run the application 
+# Run the application
 shinyApp(ui = ui, server = server)
