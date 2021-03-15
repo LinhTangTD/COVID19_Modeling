@@ -134,7 +134,7 @@ for (i in 0:100) {
   Qsym.to.H.nv = rbinom(1, Qsym.nv, H.rate.nv)
   Qsym.to.R.nv = rbinom(1, Qsym.nv, R.rate.sym.nv)
   Qsym.to.D.nv = rbinom(1, Qsym.nv, D.rate.sym.nv)
-  while ((Qsym.to.H.nv + Qsym.to.R.nv + Qsym.to.D.nv) > Qsym.v) {
+  while ((Qsym.to.H.nv + Qsym.to.R.nv + Qsym.to.D.nv) > Qsym.nv) {
     Qsym.to.H.nv = rbinom(1, Qsym.nv, H.rate.nv)
     Qsym.to.R.nv = rbinom(1, Qsym.nv, R.rate.sym.nv)
     Qsym.to.D.nv = rbinom(1, Qsym.nv, D.rate.sym.nv)
@@ -281,20 +281,37 @@ for (i in 0:100) {
   nonconfirmed.sym.to.H.v = rbinom(1, nonconfirmed.sym.v, H.rate.v)
   nonconfirmed.sym.to.R.v = rbinom(1, nonconfirmed.sym.v, R.rate.sym.v)
   nonconfirmed.sym.to.D.v = rbinom(1, nonconfirmed.sym.v, D.rate.sym.v)
+    while (nonconfirmed.sym.to.H.v + nonconfirmed.sym.to.R.v + nonconfirmed.sym.to.D.v > nonconfirmed.sym.v) {
+     nonconfirmed.sym.to.H.v = rbinom(1, nonconfirmed.sym.v, H.rate.v)
+     nonconfirmed.sym.to.R.v = rbinom(1, nonconfirmed.sym.v, R.rate.sym.v)
+     nonconfirmed.sym.to.D.v = rbinom(1, nonconfirmed.sym.v, D.rate.sym.v) 
+    }
   nonconfirmed.asym.to.R.v = rbinom(1, nonconfirmed.asym.v, R.rate.asym.v)
   nonconfirmed.asym.to.D.v = rbinom(1, nonconfirmed.asym.v, D.rate.asym.v)
+    while (nonconfirmed.asym.to.R.v + nonconfirmed.asym.to.D.v > nonconfirmed.asym.v) {
+     nonconfirmed.asym.to.R.v = rbinom(1, nonconfirmed.asym.v, R.rate.asym.v)
+     nonconfirmed.asym.to.D.v = rbinom(1, nonconfirmed.asym.v, D.rate.asym.v)  
+    }
   Qsym.to.H.v = rbinom(1, Qsym.v, H.rate.v)
   Qsym.to.R.v = rbinom(1, Qsym.v, R.rate.sym.v)
   Qsym.to.D.v = rbinom(1, Qsym.v, D.rate.sym.v)
-  while (Qsym.to.H.v + Qsym.to.R.v + Qsym.to.D.v > Qsym.v) {
-    Qsym.to.H.v = rbinom(1, Qsym.v, H.rate.v)
-    Qsym.to.R.v = rbinom(1, Qsym.v, R.rate.sym.v)
-    Qsym.to.D.v = rbinom(1, Qsym.v, D.rate.sym.v)
-  }
+    while (Qsym.to.H.v + Qsym.to.R.v + Qsym.to.D.v > Qsym.v) {
+      Qsym.to.H.v = rbinom(1, Qsym.v, H.rate.v)
+      Qsym.to.R.v = rbinom(1, Qsym.v, R.rate.sym.v)
+      Qsym.to.D.v = rbinom(1, Qsym.v, D.rate.sym.v)
+    }
   Qasym.to.R.v = rbinom(1, Qasym.v, R.rate.asym.v)
   Qasym.to.D.v = rbinom(1, Qasym.v, D.rate.asym.v)
+    while (Qasym.to.R.v + Qasym.to.D.v > Qasym.v) {
+      Qasym.to.R.v = rbinom(1, Qasym.v, R.rate.asym.v)
+      Qasym.to.D.v = rbinom(1, Qasym.v, D.rate.asym.v)
+    }
   H.to.R.v = rbinom(1, H.v, R.rate.h.v)
   H.to.D.v = rbinom(1, H.v, D.rate.h.v)
+    while (H.to.R.v + H.to.D.v > H.v) {
+      H.to.R.v = rbinom(1, H.v, R.rate.h.v)
+      H.to.D.v = rbinom(1, H.v, D.rate.h.v)
+    }
   ### Calculate changes in each compartment
   dS.v = - new.exposed.v - new.quarantined.v + quarantine.released.today.v
   dFQ.v = new.quarantined.v - quarantine.released.today.v
@@ -460,13 +477,28 @@ for (i in 0:100) {
   nonconfirmed.sym.to.H.nv = rbinom(1, nonconfirmed.sym.nv, H.rate.nv)
   nonconfirmed.sym.to.R.nv = rbinom(1, nonconfirmed.sym.nv, R.rate.sym.nv)
   nonconfirmed.sym.to.D.nv = rbinom(1, nonconfirmed.sym.nv, D.rate.sym.nv)
+    while (nonconfirmed.sym.to.H.nv + nonconfirmed.sym.to.R.nv + nonconfirmed.sym.to.D.nv > noncomfirmed.sym.nv) {
+      nonconfirmed.sym.to.H.nv = rbinom(1, nonconfirmed.sym.nv, H.rate.nv)
+      nonconfirmed.sym.to.R.nv = rbinom(1, nonconfirmed.sym.nv, R.rate.sym.nv)
+      nonconfirmed.sym.to.D.nv = rbinom(1, nonconfirmed.sym.nv, D.rate.sym.nv)
+    }
+      
   nonconfirmed.asym.to.R.nv = rbinom(1, nonconfirmed.asym.nv, R.rate.asym.nv)
   Qsym.to.H.nv = rbinom(1, Qsym.nv, H.rate.nv)
   Qsym.to.R.nv = rbinom(1, Qsym.nv, R.rate.sym.nv)
   Qsym.to.D.nv = rbinom(1, Qsym.nv, D.rate.sym.nv)
+    while (Qsym.to.H.nv + Qsym.to.R.nv + Qsym.to.D.nv > Qsym.nv) {
+      Qsym.to.H.nv = rbinom(1, Qsym.nv, H.rate.nv)
+      Qsym.to.R.nv = rbinom(1, Qsym.nv, R.rate.sym.nv)
+      Qsym.to.D.nv = rbinom(1, Qsym.nv, D.rate.sym.nv)
+  }
   Qasym.to.R.nv = rbinom(1, Qasym.nv, R.rate.asym.nv)
   H.to.R.nv = rbinom(1, H.nv, R.rate.h.nv)
   H.to.D.nv = rbinom(1, H.nv, D.rate.h.nv)
+    while (H.to.R.nv + H.to.D.nv > H.nv) {
+      H.to.R.nv = rbinom(1, H.nv, R.rate.h.nv)
+      H.to.D.nv = rbinom(1, H.nv, D.rate.h.nv)
+    }
   
   ### Calculate changes in each compartment
   dS.nv = - new.exposed.nv - new.quarantined.nv + quarantine.released.today.nv
@@ -501,15 +533,37 @@ for (i in 0:100) {
   nonconfirmed.sym.to.H.v = rbinom(1, nonconfirmed.sym.v, H.rate.v)
   nonconfirmed.sym.to.R.v = rbinom(1, nonconfirmed.sym.v, R.rate.sym.v)
   nonconfirmed.sym.to.D.v = rbinom(1, nonconfirmed.sym.v, D.rate.sym.v)
+    while (nonconfirmed.sym.to.H.v + nonconfirmed.sym.to.R.v + nonconfirmed.sym.to.D.v > nonconfirmed.sym.v) {
+     nonconfirmed.sym.to.H.v = rbinom(1, nonconfirmed.sym.v, H.rate.v)
+     nonconfirmed.sym.to.R.v = rbinom(1, nonconfirmed.sym.v, R.rate.sym.v)
+     nonconfirmed.sym.to.D.v = rbinom(1, nonconfirmed.sym.v, D.rate.sym.v) 
+    }
   nonconfirmed.asym.to.R.v = rbinom(1, nonconfirmed.asym.v, R.rate.asym.v)
   nonconfirmed.asym.to.D.v = rbinom(1, nonconfirmed.asym.v, D.rate.asym.v)
+    while (nonconfirmed.asym.to.R.v + nonconfirmed.asym.to.D.v > nonconfirmed.asym.v) {
+     nonconfirmed.asym.to.R.v = rbinom(1, nonconfirmed.asym.v, R.rate.asym.v)
+     nonconfirmed.asym.to.D.v = rbinom(1, nonconfirmed.asym.v, D.rate.asym.v)  
+    }
   Qsym.to.H.v = rbinom(1, Qsym.v, H.rate.v)
   Qsym.to.R.v = rbinom(1, Qsym.v, R.rate.sym.v)
   Qsym.to.D.v = rbinom(1, Qsym.v, D.rate.sym.v)
+    while (Qsym.to.H.v + Qsym.to.R.v + Qsym.to.D.v > Qsym.v) {
+      Qsym.to.H.v = rbinom(1, Qsym.v, H.rate.v)
+      Qsym.to.R.v = rbinom(1, Qsym.v, R.rate.sym.v)
+      Qsym.to.D.v = rbinom(1, Qsym.v, D.rate.sym.v)
+    }
   Qasym.to.R.v = rbinom(1, Qasym.v, R.rate.asym.v)
   Qasym.to.D.v = rbinom(1, Qasym.v, D.rate.asym.v)
+    while (Qasym.to.R.v + Qasym.to.D.v > Qasym.v) {
+      H.to.R.v = rbinom(1, H.v, R.rate.h.v)
+      H.to.D.v = rbinom(1, H.v, D.rate.h.v)
+    }
   H.to.R.v = rbinom(1, H.v, R.rate.h.v)
   H.to.D.v = rbinom(1, H.v, D.rate.h.v)
+    while (H.to.R.v + H.to.D.v > H.v) {
+      H.to.R.v = rbinom(1, H.v, R.rate.h.v)
+      H.to.D.v = rbinom(1, H.v, D.rate.h.v)
+    }
   
   ### Calculate changes in each compartment
   dS.v = - new.exposed.v - new.quarantined.v + quarantine.released.today.v
