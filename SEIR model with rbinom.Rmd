@@ -179,7 +179,7 @@ for (i in 0:100) {
   Qasym.to.R.nv = rbinom(1, Qasym.nv, R.rate.asym.nv)
   H.to.R.nv = rbinom(1, H.nv, R.rate.h.nv)
   H.to.D.nv = rbinom(1, H.nv, D.rate.h.nv)
-  while ((H.to.R.nv + H.to.D.nv) > H.nv) {
+  while ((H.to.R.nv + H.to.D.nv) > H.nv) { # These while loops check for errors
     H.to.R.nv = rbinom(1, H.nv, R.rate.h.nv)
     H.to.D.nv = rbinom(1, H.nv, D.rate.h.nv)
   }
