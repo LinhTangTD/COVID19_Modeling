@@ -29,7 +29,7 @@ I.rate.asym = 1.5 #infection rate for asymptomatic group
 p.test.sym.nv = 0.5 #percentage of testing for symptomatic group
 p.test.asym.nv = 0.3 #percentage of testing for asymptomatic group
 p.test.all.nv = p.test.asym.nv/2 #percentage of testing for all NV sub-population
-p.fp.all.nv = .05 #false positive percentage of testing for all NV sub-population
+p.fp.all.nv = .01 #false positive percentage of testing for all NV sub-population
 p.tp.sym.nv = .98 #true positive percentage for symptomatic group
 p.tp.asym.nv = .95 #true positive percentage for asymptomatic group
 ### Immutatble Parameters (disease's rates)
@@ -45,7 +45,7 @@ D.rate.h.nv = 0.01333 #death rate for hospitalized group
 ### Mutable Parameters (Testing effectiveness, quarantine days)
 p.test.sym.v = 0.6 #percentage of testing for symptomatic group
 p.test.asym.v = 0.3 #percentage of testing for asymptomatic group
-p.test.all.v = p.test.asym.v/4 #percentage of testing for all V sub-population
+p.test.all.v = p.test.asym.v/2 #percentage of testing for all V sub-population
 p.fp.all.v = .01 #false positive percentage of testing for all V sub-population
 p.tp.sym.v = .98 #true positive percentage for symptomatic group
 p.tp.asym.v = .95 #true positive percentage for asymptomatic group
@@ -140,10 +140,11 @@ for (i in 0:100) {
                    Pop.v, S.v, FQ.v, E.v, Isym.v, Iasym.v, Qsym.v, Qasym.v, H.v, R.v, D.v)
   
   ### Immediate calculations (for next day statistics)
-  new.exposed.nv = min(rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
+  new.exposed.nv = min(
+                   (rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
                    rbinom(1, S.nv, I.rate.asym * Iasym.v / N) +
                    rbinom(1, S.nv, I.rate.sym * Isym.nv / N) + 
-                   rbinom(1, S.nv, I.rate.asym * Iasym.nv), N, S.nv)
+                   rbinom(1, S.nv, I.rate.asym * Iasym.nv / N)), S.nv)
 #(S.nv/N) * (I.rate.sym * Isym.nv + I.rate.asym * Iasym.nv + I.rate.sym * Isym.v + I.rate.asym * Iasym.v)
   quarantine.released.today.nv = rbinom(1, FQ.nv, 1/day.q)
   new.quarantined.nv = rbinom(1, S.nv, p.test.all.nv * p.fp.all.nv)
@@ -160,7 +161,7 @@ for (i in 0:100) {
   nonconfirmed.sym.to.H.nv = rbinom(1, nonconfirmed.sym.nv, H.rate.nv)
   nonconfirmed.sym.to.R.nv = rbinom(1, nonconfirmed.sym.nv, R.rate.sym.nv)
   nonconfirmed.sym.to.D.nv = rbinom(1, nonconfirmed.sym.nv, D.rate.sym.nv)
-  while (nonconfirmed.sym.to.H.nv + nonconfirmed.sym.to.R.nv + nonconfirmed.sym.to.D.nv > nonconfirmed.sym.nv) {
+  while ((nonconfirmed.sym.to.H.nv + nonconfirmed.sym.to.R.nv + nonconfirmed.sym.to.D.nv) > nonconfirmed.sym.nv) {
     nonconfirmed.sym.to.H.nv = rbinom(1, nonconfirmed.sym.nv, H.rate.nv)
     nonconfirmed.sym.to.R.nv = rbinom(1, nonconfirmed.sym.nv, R.rate.sym.nv)
     nonconfirmed.sym.to.D.nv = rbinom(1, nonconfirmed.sym.nv, D.rate.sym.nv)
@@ -170,7 +171,7 @@ for (i in 0:100) {
   Qsym.to.H.nv = rbinom(1, Qsym.nv, H.rate.nv)
   Qsym.to.R.nv = rbinom(1, Qsym.nv, R.rate.sym.nv)
   Qsym.to.D.nv = rbinom(1, Qsym.nv, D.rate.sym.nv)
-  while (Qsym.to.H.nv + Qsym.to.R.nv + Qsym.to.D.nv > Qsym.nv) {
+  while ((Qsym.to.H.nv + Qsym.to.R.nv + Qsym.to.D.nv) > Qsym.nv) {
     Qsym.to.H.nv = rbinom(1, Qsym.nv, H.rate.nv)
     Qsym.to.R.nv = rbinom(1, Qsym.nv, R.rate.sym.nv)
     Qsym.to.D.nv = rbinom(1, Qsym.nv, D.rate.sym.nv)
@@ -178,7 +179,7 @@ for (i in 0:100) {
   Qasym.to.R.nv = rbinom(1, Qasym.nv, R.rate.asym.nv)
   H.to.R.nv = rbinom(1, H.nv, R.rate.h.nv)
   H.to.D.nv = rbinom(1, H.nv, D.rate.h.nv)
-  while (H.to.R.nv + H.to.D.nv > H.nv) {
+  while ((H.to.R.nv + H.to.D.nv) > H.nv) {
     H.to.R.nv = rbinom(1, H.nv, R.rate.h.nv)
     H.to.D.nv = rbinom(1, H.nv, D.rate.h.nv)
   }
@@ -196,10 +197,11 @@ for (i in 0:100) {
   dD.nv = H.to.D.nv + nonconfirmed.sym.to.D.nv + Qsym.to.D.nv
   
   ### Immediate calculations (for next day statistics)
-  new.exposed.v =  min(rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
+  new.exposed.v =  min(
+                   (rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
                    rbinom(1, S.nv, I.rate.asym * Iasym.v / N) +
                    rbinom(1, S.nv, I.rate.sym * Isym.nv / N) + 
-                   rbinom(1, S.nv, I.rate.asym * Iasym.nv), N, S.nv)
+                   rbinom(1, S.nv, I.rate.asym * Iasym.nv / N)), S.nv)
 #(S.v/N) * (I.rate.sym * Isym.nv + I.rate.asym * Iasym.nv + I.rate.sym * Isym.v + I.rate.asym * Iasym.v)
   quarantine.released.today.v = rbinom(1, FQ.v, 1/day.q)
   new.quarantined.v = rbinom(1, S.v, p.test.all.v * p.fp.all.v)
@@ -216,14 +218,14 @@ for (i in 0:100) {
   nonconfirmed.sym.to.H.v = rbinom(1, nonconfirmed.sym.v, H.rate.v)
   nonconfirmed.sym.to.R.v = rbinom(1, nonconfirmed.sym.v, R.rate.sym.v)
   nonconfirmed.sym.to.D.v = rbinom(1, nonconfirmed.sym.v, D.rate.sym.v)
-  while (nonconfirmed.sym.to.H.v + nonconfirmed.sym.to.R.v + nonconfirmed.sym.to.D.v > nonconfirmed.sym.v) {
+  while ((nonconfirmed.sym.to.H.v + nonconfirmed.sym.to.R.v + nonconfirmed.sym.to.D.v) > nonconfirmed.sym.v) {
    nonconfirmed.sym.to.H.v = rbinom(1, nonconfirmed.sym.v, H.rate.v)
    nonconfirmed.sym.to.R.v = rbinom(1, nonconfirmed.sym.v, R.rate.sym.v)
    nonconfirmed.sym.to.D.v = rbinom(1, nonconfirmed.sym.v, D.rate.sym.v) 
   }
   nonconfirmed.asym.to.R.v = rbinom(1, nonconfirmed.asym.v, R.rate.asym.v)
   nonconfirmed.asym.to.D.v = rbinom(1, nonconfirmed.asym.v, D.rate.asym.v)
-  while (nonconfirmed.asym.to.R.v + nonconfirmed.asym.to.D.v > nonconfirmed.asym.v) {
+  while ((nonconfirmed.asym.to.R.v + nonconfirmed.asym.to.D.v) > nonconfirmed.asym.v) {
    nonconfirmed.asym.to.R.v = rbinom(1, nonconfirmed.asym.v, R.rate.asym.v)
    nonconfirmed.asym.to.D.v = rbinom(1, nonconfirmed.asym.v, D.rate.asym.v)  
   }
@@ -237,13 +239,13 @@ for (i in 0:100) {
   }
   Qasym.to.R.v = rbinom(1, Qasym.v, R.rate.asym.v)
   Qasym.to.D.v = rbinom(1, Qasym.v, D.rate.asym.v)
-  while (Qasym.to.R.v + Qasym.to.D.v > Qasym.v) {
+  while ((Qasym.to.R.v + Qasym.to.D.v) > Qasym.v) {
     H.to.R.v = rbinom(1, H.v, R.rate.h.v)
     H.to.D.v = rbinom(1, H.v, D.rate.h.v)
   }
   H.to.R.v = rbinom(1, H.v, R.rate.h.v)
   H.to.D.v = rbinom(1, H.v, D.rate.h.v)
-  while (H.to.R.v + H.to.D.v > H.v) {
+  while ((H.to.R.v + H.to.D.v) > H.v) {
     H.to.R.v = rbinom(1, H.v, R.rate.h.v)
     H.to.D.v = rbinom(1, H.v, D.rate.h.v)
   }
