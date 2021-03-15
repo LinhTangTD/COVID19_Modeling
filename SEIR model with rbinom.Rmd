@@ -141,7 +141,7 @@ for (i in 0:100) {
   
   ### Immediate calculations (for next day statistics)
   new.exposed.nv = min(
-                   (rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
+                  (rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
                    rbinom(1, S.nv, I.rate.asym * Iasym.v / N) +
                    rbinom(1, S.nv, I.rate.sym * Isym.nv / N) + 
                    rbinom(1, S.nv, I.rate.asym * Iasym.nv / N)), S.nv)
