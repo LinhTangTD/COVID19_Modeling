@@ -10,6 +10,33 @@ knitr::opts_chunk$set(echo = TRUE)
 source("model_function.R") #load model building function
 ```
 
+```{r test_case}
+num_sim = 10
+test_func = function(){
+  return(model(.01, .2, .005, .2, .1, .3, .2, 1, 1, .2, .6, .9, .85, 100))
+}
+test_data = data.frame(H.rate.nv = numeric(),
+                      H.rate.v = numeric(),
+                      p.fp.all = numeric(),
+                      p.test.sym.nv = numeric(),
+                      p.test.asym.nv = numeric(),
+                      p.test.sym.v = numeric(),
+                      p.test.asym.v = numeric(),
+                      I.rate.sym = numeric(),
+                      I.rate.asym = numeric(),
+                      p.sym.nv = numeric(),
+                      p.sym.v = numeric(),
+                      p.tp.sym.all = numeric(),
+                      p.tp.asym.all = numeric(),
+                      Peak.Infected = numeric(), 
+                      Total.Infected = numeric(),
+                      Peak.Hospitalized = numeric(),
+                      Total.Dead = numeric())
+for(i in 1:num_sim){
+  test_data[nrow(test_data)+1,] = test_func()
+}
+```
+
 ```{r params_setting}
 H.rate.nv.list = list(.01, .1)
 H.rate.v.list = list(.2, .6)
@@ -61,7 +88,7 @@ for(H.rate.nv in H.rate.nv.list){
                     for(p.sym.v in p.sym.v.list){
                       for(p.tp.sym.all in p.tp.sym.all.list){
                         for(p.tp.asym.all in p.tp.asym.all.list){
-                          for(i in num_sim){
+                          for(i in 1:num_sim){
                             current_data = model(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p.test.sym.v, p.test.asym.v,
                                                 I.rate.sym, I.rate.asym, p.sym.nv, p.sym.v, p.tp.sym.all, p.tp.asym.all, num_day)
                             all_data[nrow(all_data) + 1,] = current_data
