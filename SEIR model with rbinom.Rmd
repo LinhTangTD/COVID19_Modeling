@@ -198,10 +198,11 @@ for (i in 0:100) {
   
   ### Immediate calculations (for next day statistics)
   new.exposed.v =  min(
-                   (rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
-                   rbinom(1, S.nv, I.rate.asym * Iasym.v / N) +
-                   rbinom(1, S.nv, I.rate.sym * Isym.nv / N) + 
-                   rbinom(1, S.nv, I.rate.asym * Iasym.nv / N)), S.nv)
+                   (rbinom(1, S.v, I.rate.sym * Isym.v / N) +
+                   rbinom(1, S.v, I.rate.asym * Iasym.v / N) +
+                   rbinom(1, S.v, I.rate.sym * Isym.nv / N) + 
+                   rbinom(1, S.v, I.rate.asym * Iasym.nv / N)), S.nv)
+  new.exposed.v
 #(S.v/N) * (I.rate.sym * Isym.nv + I.rate.asym * Iasym.nv + I.rate.sym * Isym.v + I.rate.asym * Iasym.v)
   quarantine.released.today.v = rbinom(1, FQ.v, 1/day.q)
   new.quarantined.v = rbinom(1, S.v, p.test.all.v * p.fp.all.v)
