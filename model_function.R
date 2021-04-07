@@ -1,6 +1,5 @@
 model = function(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p.test.sym.v, p.test.asym.v,
-                 I.rate.sym, I.rate.asym, p.sym.nv, p.sym.v, p.tp.sym.all, p.tp.asym.all,
-                 num_day){
+                 I.rate.sym, I.rate.asym, p.sym.nv, p.sym.v, p.tp.sym.all, p.tp.asym.all){
   
   # Population is split into 2 sub-populations: Vulnerable (V) and Non-Vulnerable (NV)
   N = 100000
@@ -58,8 +57,13 @@ model = function(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p
   Current.Hospitalized.All = H.nv + H.v
   Peak.Hospitalized = Current.Hospitalized.All
   Total.Dead.So.Far  = D.nv + D.v
+  Peak.Day.Infected = 0
+  Possible.End.Days = 0
+  day = 0
   
-  for(i in 1:num_day){
+  for(i in 1:500){
+  # while(TRUE){
+    day = day + 1
     ### Immediate calculations (for next day statistics)
     new.exposed.nv = min(
       (rbinom(1, S.nv, I.rate.sym * Isym.v / N) +
@@ -159,8 +163,8 @@ model = function(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p
     Qasym.to.R.v = rbinom(1, Qasym.v, R.rate.asym.v)
     Qasym.to.D.v = rbinom(1, Qasym.v, D.rate.asym.v)
     while((Qasym.to.R.v + Qasym.to.D.v) > Qasym.v){
-      H.to.R.v = rbinom(1, H.v, R.rate.h.v)
-      H.to.D.v = rbinom(1, H.v, D.rate.h.v)
+      Qasym.to.R.v = rbinom(1, Qasym.v, R.rate.asym.v)
+      Qasym.to.D.v = rbinom(1, Qasym.v, D.rate.asym.v)
     }
     H.to.R.v = rbinom(1, H.v, R.rate.h.v)
     H.to.D.v = rbinom(1, H.v, D.rate.h.v)
@@ -204,15 +208,24 @@ model = function(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p
     D.v = D.v + dD.v
     
     # Summary Data (response variables)
+    Current.Infected.All = Isym.v + Isym.nv + Iasym.v + Iasym.nv
     Newly.Infected.All = new.infected.all.nv + new.infected.all.v
-    Peak.Infected = max(c(Newly.Infected.All, Peak.Infected))
     Total.Infected.So.Far = Total.Infected.So.Far + Newly.Infected.All
     Current.Hospitalized.All = H.nv + H.v
     Peak.Hospitalized = max(c(Current.Hospitalized.All, Peak.Hospitalized))
     Total.Dead.So.Far  = D.nv + D.v
+    if(Newly.Infected.All > Peak.Infected){
+      Peak.Infected = Newly.Infected.All
+      Peak.Day.Infected = day
+    }
+    if(Current.Infected.All < 20){
+      Possible.End.Days = c(Possible.End.Days, day)
+    }
   }
-  summary_data = list(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p.test.sym.v, p.test.asym.v, 
-                      I.rate.sym, I.rate.asym, p.sym.nv, p.sym.v, p.tp.sym.all, p.tp.asym.all, 
-                      Peak.Infected, Total.Infected.So.Far, Peak.Hospitalized, Total.Dead.So.Far)
+  End.Day = min(Possible.End.Days[Possible.End.Days > Peak.Day.Infected])
+  summary_data = c(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p.test.sym.v, p.test.asym.v,
+                      I.rate.sym, I.rate.asym, p.sym.nv, p.sym.v, p.tp.sym.all, p.tp.asym.all,
+                      Peak.Infected, Total.Infected.So.Far, Peak.Hospitalized, Total.Dead.So.Far, Peak.Day.Infected, End.Day)
+  # return(list(summary_data, Possible.End.Days))
   return(summary_data)
 }
