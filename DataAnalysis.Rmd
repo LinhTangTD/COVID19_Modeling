@@ -1,0 +1,15 @@
+---
+title: "Data Analysis"
+author: "Linh Tang, Britney He"
+date: "4/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+exp_data = read.csv("exp_data.csv")
+summary(exp_data[,15:20])
+```
