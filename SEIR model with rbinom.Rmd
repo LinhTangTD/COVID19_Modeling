@@ -44,7 +44,7 @@ for(i in 1:num_sim){
 ```{r params_setting}
 H.rate.nv.list = list(.01, .1)
 H.rate.v.list = list(.2, .6)
-p.fp.all.list = list(.005, .2)
+p.fp.all.list = list(.005, .02)
 p.test.sym.nv.list = list(.2, .6)
 p.test.asym.nv.list = list(.1, .3)
 p.test.sym.v.list = list(.3, .7)
@@ -113,5 +113,6 @@ for(H.rate.nv in H.rate.nv.list){
     }
   }
 }
+summary(all_data[,14:19])
 write.csv(all_data, "exp_data.csv")
 ```

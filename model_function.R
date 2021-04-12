@@ -60,9 +60,8 @@ model = function(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p
   Peak.Day.Infected = 0
   Possible.End.Days = 0
   day = 0
-  
-  for(i in 1:500){
-  # while(TRUE){
+  checkpoints = c(100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400)
+  for(i in 1:1500){
     day = day + 1
     ### Immediate calculations (for next day statistics)
     new.exposed.nv = min(
@@ -220,6 +219,12 @@ model = function(H.rate.nv, H.rate.v, p.fp.all, p.test.sym.nv, p.test.asym.nv, p
     }
     if(Current.Infected.All < 20){
       Possible.End.Days = c(Possible.End.Days, day)
+    }
+    if(i %in% checkpoints){
+      End.Day = min(Possible.End.Days[Possible.End.Days > Peak.Day.Infected])
+      if(End.Day != Inf){
+        break
+      }
     }
   }
   End.Day = min(Possible.End.Days[Possible.End.Days > Peak.Day.Infected])
