@@ -49,3 +49,6 @@ SIR.plot = function(model){
 #Test
 a = basicSIR(500, 0.2, 5, 0.01, 0.7)
 SIR.plot(a)
+
+
+data <-
