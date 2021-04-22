@@ -15,5 +15,5 @@ exp_data = read.csv("exp_data.csv")
 exp_data_13 = filter(exp_data, I.rate.sym == 1, I.rate.asym == 3)
 exp_data_31 = filter(exp_data, I.rate.sym == 3, I.rate.asym == 1)
 write.csv(exp_data_13, "exp_data_13.csv")
-write.csv(exp_data_13, "exp_data_31.csv")
+write.csv(exp_data_31, "exp_data_31.csv")
 ```
