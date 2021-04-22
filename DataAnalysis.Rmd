@@ -1,15 +1,19 @@
 ---
 title: "Data Analysis"
-author: "Linh Tang, Britney He"
+author: "Linh Tang, Britney He, Bowen Mince, Senay Gokcebel"
 date: "4/8/2021"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
 ```
 
 ```{r}
 exp_data = read.csv("exp_data.csv")
-summary(exp_data[,15:20])
+exp_data_13 = filter(exp_data, I.rate.sym == 1, I.rate.asym == 3)
+exp_data_31 = filter(exp_data, I.rate.sym == 3, I.rate.asym == 1)
+write.csv(exp_data_13, "exp_data_13.csv")
+write.csv(exp_data_13, "exp_data_31.csv")
 ```
